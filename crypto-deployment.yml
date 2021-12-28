@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crypto-deployment
+spec:
+  selector:
+    matchLabels:
+      app: crypto-spring-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: crypto-spring-service
+    spec:
+      containers:
+        - name: crypto-spring-service
+          image: crypto-k8-service
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: MONGO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: username
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: password
+            - name: MONGO_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-conf
+                  key: database
+            - name: MONGO_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-conf
+                  key: host
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: crypto-service
+spec:
+  selector:
+    app: crypto-spring-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30000
+  type: LoadBalancer
