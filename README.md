@@ -1,11 +1,5 @@
-# springboot-k8s-mongo
+# spring-k8-mongo demo
 
-Pre-requisites:
---------
-    - Install Git
-    - Install Maven
-    - Install Docker
-    - EKS Cluster
     
 Clone code from github:
 -------
