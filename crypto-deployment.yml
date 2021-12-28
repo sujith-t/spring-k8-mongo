@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: crypto-spring-service
-          image: crypto-k8-service
+          image: sujitht/crypto-k8-service
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
