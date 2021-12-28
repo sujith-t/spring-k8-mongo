@@ -51,4 +51,9 @@ public class TradingController {
         Optional<CoinTrade> opt = dao.findById(orderId);
         return ResponseEntity.ok(opt.orElse(null));
     }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> checkHealth() {
+        return ResponseEntity.ok("success");
+    }
 }
