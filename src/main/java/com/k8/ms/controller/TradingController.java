@@ -52,8 +52,8 @@ public class TradingController {
         return ResponseEntity.ok(opt.orElse(null));
     }
 
-    /*@GetMapping("/health")
+    @GetMapping("/health")
     public ResponseEntity<String> checkHealth() {
-        return ResponseEntity.ok("success");
-    }*/
+        return ResponseEntity.ok("v1");
+    }
 }

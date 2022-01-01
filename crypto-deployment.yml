@@ -7,7 +7,12 @@ spec:
   selector:
     matchLabels:
       app: crypto-spring-service
-  replicas: 2
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
   template:
     metadata:
       labels:
@@ -15,7 +20,7 @@ spec:
     spec:
       containers:
         - name: crypto-spring-service
-          image: sujitht/crypto-k8-service
+          image: sujitht/crypto-k8-service:v-1641033473
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
