@@ -1,4 +1,7 @@
 # spring-k8-mongo demo
+# rolling update https://www.youtube.com/watch?v=xRifmrap7S8
+# versioning -> stamp=`date +"%s"` filename="sdt_$stamp" echo $filename
+# docker_image="sujitht/crypto-k8-service:v-`date +"%s"`"
 
     
 Clone code from github:
@@ -12,7 +15,7 @@ Build Maven Artifact:
  
 Build Docker image for Springboot Application
 --------------
-    docker build -t sujitht/crypto-k8-service .
+    docker build -t sujitht/crypto-k8-service:version .
   
 Docker login
 -------------
@@ -20,7 +23,7 @@ Docker login
     
 Push docker image to dockerhub
 -----------
-    docker push sujitht/crypto-k8-service:latest
+    docker push sujitht/crypto-k8-service:version
 
 Encode USERNAME and PASSWORD of Postgres using following commands:
 --------
@@ -72,3 +75,7 @@ Now we can cleanup by using below commands:
     kubectl delete pv mongo-pv-volume
     kubectl delete configmaps mongo-conf
     kubectl delete secrets mongo-secret
+
+Testing blue-green deployment undo rolling out
+--------
+    kubectl rollout undo deployment crypto-deployment
