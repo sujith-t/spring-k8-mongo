@@ -54,6 +54,6 @@ public class TradingController {
 
     @GetMapping("/health")
     public ResponseEntity<String> checkHealth() {
-        return ResponseEntity.ok("my error version");
+        return ResponseEntity.ok("v1");
     }
 }

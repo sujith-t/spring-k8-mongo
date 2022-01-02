@@ -1,19 +1,15 @@
-# spring-k8-mongo demo
-# rolling update https://www.youtube.com/watch?v=xRifmrap7S8
-# versioning -> stamp=`date +"%s"` filename="sdt_$stamp" echo $filename
-# docker_image="sujitht/crypto-k8-service:v-`date +"%s"`"
+# version="v-`date +"%s"`"
 
-    
 Clone code from github:
 -------
     git clone git@github.com:sujith-t/spring-k8-mongo.git
     cd spring-k8-mongo
     
-Build Maven Artifact:
+Build maven artifact:
 -------
     mvn clean install -DskipTests=true
  
-Build Docker image for Springboot Application
+Build docker image for cryptocurrency service
 --------------
     docker build -t sujitht/crypto-k8-service:version .
   
@@ -25,11 +21,12 @@ Push docker image to dockerhub
 -----------
     docker push sujitht/crypto-k8-service:version
 
-Encode USERNAME and PASSWORD of Postgres using following commands:
+Encode USERNAME and PASSWORD using following commands:
 --------
     echo -n "mongoadmin" | base64
     echo -n "admin123" | base64
-Create the Secret using kubectl apply:
+
+Create the secret:
 -------
     kubectl apply -f mongo-secret.yml
 
@@ -37,26 +34,26 @@ Create PV and PVC for Mongo using yaml file:
 -----
     kubectl apply -f mongo-pv.yml
     kubectl apply -f mongo-pvc.yml
-    
-Deploying Mongo with kubectl apply:
------------
-    kubectl apply -f mongo-deployment.yml
-    kubectl apply -f mongo-service.yml
-    
-Give permission for service which is running under same namespace by using rolebinding
+
+Give permission for service which is running under same namespace by using role binding
 ----------------------
     kubectl create rolebinding default-view \
       --clusterrole=view \
       --serviceaccount=default:default \
       --namespace=default
 
-Create configmaps for URL which we use in Springboot:
+Create configmaps for URL which used in application:
 -------
     kubectl apply -f mongo-config.yml
-Deploy Springboot Application:
+
+Deploy mongo:
+-----------
+    kubectl apply -f mongo-deployment.yml
+
+Deploy cryptocurrency service:
 -------------
-    kubectl apply -f springboot-deployment.yml
-    kubectl apply -f springboot-service.yml
+    kubectl apply -f crypto-deployment.yml
+
 Check secrets:
 -------
     kubectl get secrets
@@ -67,14 +64,14 @@ Check secrets:
     kubectl get pods
     kubectl get svc
  
-Now we can cleanup by using below commands:
+Cleanup by using below commands:
 --------
-    kubectl delete deploy mongo spring-mongo-service
-    kubectl delete svc mongodb-service spring-mongo-service
-    kubectl delete pvc mongo-pv-claim
-    kubectl delete pv mongo-pv-volume
-    kubectl delete configmaps mongo-conf
-    kubectl delete secrets mongo-secret
+    kubectl delete -f crypto-deployment.yml
+    kubectl delete -f mongo-deployment.yml
+    kubectl delete -f mongo-config.yml
+    kubectl delete -f mongo-pvc.yml
+    kubectl delete -f mongo-pv.yml
+    kubectl delete -f mongo-secret.yml
 
 Testing blue-green deployment undo rolling out
 --------
